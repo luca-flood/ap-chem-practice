@@ -1,0 +1,945 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17324d">
+  <title>AP Chemistry Practice</title>
+  <meta name="description" content="AP Chemistry practice for nomenclature, periodic trends, and solubility guidelines, with saved progress and targeted review.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%2317324d'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%23ff7a59'/%3E%3Cellipse cx='32' cy='32' rx='24' ry='10' fill='none' stroke='%23fff' stroke-width='3'/%3E%3Cellipse cx='32' cy='32' rx='10' ry='24' fill='none' stroke='%23fff' stroke-width='3' transform='rotate(45 32 32)'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172635;
+      --navy: #17324d;
+      --muted: #647384;
+      --line: #d8e0e7;
+      --paper: #ffffff;
+      --canvas: #edf2f5;
+      --teal: #168c86;
+      --coral: #e85f42;
+      --amber: #d99919;
+      --good: #207a4e;
+      --bad: #b93f35;
+      --radius: 8px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: var(--canvas); color: var(--ink); }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible { outline: 3px solid rgba(22,140,134,.28); outline-offset: 2px; }
+    .app { min-height: 100vh; display: grid; grid-template-rows: auto 1fr; }
+    header { background: var(--navy); color: white; border-bottom: 4px solid var(--teal); }
+    .header-inner { max-width: 1180px; margin: auto; min-height: 70px; padding: 12px 22px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .mark { width: 38px; height: 38px; border: 1px solid rgba(255,255,255,.42); display: grid; place-items: center; font-weight: 800; color: #fff; flex: 0 0 auto; }
+    .brand h1 { margin: 0; font-size: 1.08rem; line-height: 1.2; letter-spacing: 0; }
+    .brand p { margin: 3px 0 0; color: #c7d5df; font-size: .8rem; }
+    .header-stats { display: flex; align-items: stretch; border: 1px solid rgba(255,255,255,.2); }
+    .stat { min-width: 72px; padding: 8px 12px; text-align: center; border-left: 1px solid rgba(255,255,255,.2); }
+    .stat:first-child { border-left: 0; }
+    .stat strong { display: block; font-size: 1rem; }
+    .stat span { display: block; color: #c7d5df; font-size: .7rem; margin-top: 1px; }
+    main { width: min(1180px, 100%); margin: 0 auto; padding: 22px; display: grid; grid-template-columns: 256px minmax(0, 1fr); gap: 18px; }
+    aside, .study { background: var(--paper); border: 1px solid var(--line); box-shadow: 0 8px 24px rgba(23,50,77,.06); }
+    aside { align-self: start; }
+    .panel-section { padding: 18px; border-bottom: 1px solid var(--line); }
+    .panel-section:last-child { border-bottom: 0; }
+    .section-title { margin: 0 0 12px; color: var(--muted); font-size: .72rem; text-transform: uppercase; font-weight: 800; }
+    .segmented { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); padding: 3px; background: #f4f7f9; }
+    .segmented button { min-height: 36px; border: 0; background: transparent; color: var(--muted); font-weight: 700; font-size: .82rem; }
+    .segmented button.active { background: var(--navy); color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+    .deck-switch { grid-template-columns: 1fr; }
+    .solubility-note { margin: 12px 0 0; color: var(--muted); font-size: .8rem; line-height: 1.5; }
+    .solubility-guide { margin-top: 12px; font-size: .8rem; line-height: 1.5; }
+    .solubility-guide summary { cursor: pointer; color: var(--navy); font-weight: 750; }
+    .solubility-guide ul { padding-left: 18px; }
+    .solubility-guide li { margin: 7px 0; }
+    .answer-help { color: var(--muted); font-size: .85rem; margin: 10px 0 0; }
+    .flash-explanation { font-size: .9rem; line-height: 1.5; color: var(--muted); margin-top: 12px; }
+    .check-list { display: grid; gap: 8px; }
+    .check { display: flex; align-items: center; gap: 9px; min-height: 34px; font-size: .9rem; }
+    .check input { width: 17px; height: 17px; accent-color: var(--teal); }
+    .count { margin-left: auto; color: var(--muted); font-size: .75rem; font-variant-numeric: tabular-nums; }
+    .select { width: 100%; min-height: 40px; border: 1px solid var(--line); background: #fff; padding: 0 10px; color: var(--ink); }
+    .button { border: 1px solid var(--line); background: #fff; color: var(--ink); min-height: 40px; padding: 0 14px; font-weight: 750; border-radius: 4px; }
+    .button:hover { border-color: #9babb8; background: #f8fafb; }
+    .button.primary { background: var(--teal); border-color: var(--teal); color: white; }
+    .button.primary:hover { background: #107b76; }
+    .button.danger { color: var(--bad); }
+    .button.full { width: 100%; }
+    .study { min-height: 610px; display: grid; grid-template-rows: auto auto 1fr auto; }
+    .progress-wrap { height: 7px; background: #e6ecef; }
+    .progress-bar { height: 100%; width: 0; background: linear-gradient(90deg, var(--teal), #2eaa9e); transition: width .25s ease; }
+    .study-top { min-height: 62px; padding: 13px 20px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .badges { display: flex; gap: 7px; flex-wrap: wrap; }
+    .badge { display: inline-flex; align-items: center; min-height: 27px; padding: 0 9px; background: #edf6f5; color: #116d68; border: 1px solid #b9dfda; font-size: .75rem; font-weight: 800; border-radius: 999px; }
+    .badge.direction { background: #f8f0dd; border-color: #ead296; color: #75550e; }
+    .question-count { color: var(--muted); font-size: .86rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .card-area { display: grid; place-items: center; padding: 30px clamp(20px, 6vw, 70px); }
+    .prompt { text-align: center; width: 100%; }
+    .prompt-label { margin: 0 0 16px; color: var(--muted); font-size: .82rem; font-weight: 800; text-transform: uppercase; }
+    .prompt-value { min-height: 104px; display: grid; place-items: center; margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(2.1rem, 6vw, 4.5rem); line-height: 1.05; font-weight: 700; overflow-wrap: anywhere; }
+    .prompt-value.name { font-family: inherit; font-size: clamp(1.8rem, 4vw, 3.2rem); }
+    .answer-zone { width: min(650px, 100%); margin: 28px auto 0; }
+    .answer-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+    .answer-input { min-width: 0; height: 52px; border: 2px solid #adbac5; border-radius: 5px; padding: 0 15px; font-size: 1.04rem; color: var(--ink); }
+    .answer-input:focus { border-color: var(--teal); }
+    .formula-tools { display: none; margin-top: 10px; padding: 9px; border: 1px solid var(--line); background: #f4f7f9; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .formula-tools.show { display: flex; }
+    .script-group { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+    .script-label { margin-right: 2px; color: var(--muted); font-size: .73rem; font-weight: 800; text-transform: uppercase; }
+    .script-button { width: 34px; height: 34px; border: 1px solid #b9c5ce; background: #fff; color: var(--navy); border-radius: 4px; font-family: Georgia, "Times New Roman", serif; font-size: 1.05rem; font-weight: 700; }
+    .script-button:hover { border-color: var(--teal); background: #edf7f6; }
+    .submit { min-width: 112px; height: 52px; border: 0; background: var(--navy); color: #fff; border-radius: 5px; font-weight: 800; }
+    .submit:hover { background: #0e263d; }
+    .feedback { min-height: 64px; margin-top: 14px; padding: 13px 15px; border: 1px solid transparent; display: none; text-align: left; font-size: .94rem; line-height: 1.45; }
+    .feedback.show { display: block; }
+    .feedback.correct { background: #ecf7f1; color: #185f3e; border-color: #b9dfca; }
+    .feedback.incorrect { background: #fff0ee; color: #88312b; border-color: #ecc0ba; }
+    .feedback strong { display: block; margin-bottom: 2px; }
+    .flash-answer { display: none; min-height: 126px; margin-top: 24px; padding: 24px; background: #f4f7f9; border: 1px solid var(--line); place-items: center; text-align: center; }
+    .flash-answer.show { display: grid; }
+    .flash-answer .answer { font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 700; }
+    .flash-answer .answer.name { font-family: inherit; }
+    .flash-controls { display: none; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+    .flash-controls.show { display: grid; }
+    .reveal { width: 100%; margin-top: 24px; height: 50px; border: 2px solid var(--navy); color: var(--navy); background: #fff; font-weight: 800; border-radius: 5px; }
+    .again { border-color: #dfaaa4; color: var(--bad); }
+    .know { background: var(--good); border-color: var(--good); color: #fff; }
+    .study-bottom { min-height: 62px; border-top: 1px solid var(--line); padding: 10px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); font-size: .8rem; }
+    .mini-actions { display: flex; gap: 8px; }
+    .icon-button { width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid var(--line); background: #fff; color: var(--muted); border-radius: 4px; }
+    .icon-button:hover { color: var(--navy); border-color: #9babb8; }
+    .icon-button svg { width: 18px; height: 18px; }
+    .complete { text-align: center; max-width: 560px; }
+    .complete h2 { margin: 0; font-size: 2rem; }
+    .complete p { color: var(--muted); line-height: 1.6; }
+    .complete-score { font-size: 4rem; color: var(--teal); font-weight: 850; margin: 18px 0 4px; }
+    .analytics-dialog { width: min(760px, calc(100vw - 28px)); max-height: min(760px, calc(100vh - 28px)); padding: 0; border: 1px solid var(--line); border-radius: var(--radius); color: var(--ink); box-shadow: 0 24px 70px rgba(23,38,53,.28); }
+    .analytics-dialog::backdrop { background: rgba(18,35,50,.55); }
+    .dialog-head { padding: 18px 20px; border-bottom: 1px solid var(--line); display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+    .dialog-head h2 { margin: 0; font-size: 1.2rem; }
+    .dialog-head p { margin: 4px 0 0; color: var(--muted); font-size: .85rem; }
+    .dialog-close { width: 36px; height: 36px; flex: 0 0 auto; border: 1px solid var(--line); background: #fff; border-radius: 4px; color: var(--muted); font-size: 1.35rem; line-height: 1; }
+    .analytics-body { padding: 18px 20px; overflow: auto; }
+    .analytics-summary { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); margin-bottom: 18px; }
+    .analytics-metric { padding: 12px; border-left: 1px solid var(--line); }
+    .analytics-metric:first-child { border-left: 0; }
+    .analytics-metric strong { display: block; color: var(--navy); font-size: 1.25rem; }
+    .analytics-metric span { color: var(--muted); font-size: .75rem; }
+    .category-summary { margin-bottom: 18px; display: flex; flex-wrap: wrap; gap: 7px; }
+    .category-chip { padding: 6px 9px; background: #edf3f6; border: 1px solid var(--line); border-radius: 999px; color: #435467; font-size: .78rem; font-weight: 750; }
+    .missed-heading { margin: 0 0 9px; font-size: .82rem; color: var(--muted); text-transform: uppercase; }
+    .missed-list { border: 1px solid var(--line); }
+    .missed-row { display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 11px 12px; border-top: 1px solid var(--line); }
+    .missed-row:first-child { border-top: 0; }
+    .missed-rank { color: var(--muted); font-size: .78rem; font-weight: 800; }
+    .missed-question { min-width: 0; }
+    .missed-question strong { display: block; overflow-wrap: anywhere; }
+    .missed-question span { display: block; margin-top: 3px; color: var(--muted); font-size: .78rem; line-height: 1.35; }
+    .missed-count { min-width: 60px; text-align: right; color: var(--bad); font-weight: 850; font-size: .84rem; }
+    .analytics-empty { padding: 34px 20px; border: 1px dashed #b9c5ce; color: var(--muted); text-align: center; line-height: 1.5; }
+    .dialog-foot { padding: 14px 20px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .copy-status { min-height: 20px; color: var(--good); font-size: .8rem; }
+    .hidden { display: none !important; }
+    @media (max-width: 800px) {
+      .header-inner { align-items: flex-start; }
+      .brand p { display: none; }
+      .header-stats .stat:nth-child(2) { display: none; }
+      main { grid-template-columns: 1fr; padding: 12px; }
+      .study { order: -1; }
+      aside { display: grid; grid-template-columns: 1fr 1fr; }
+      .panel-section { border-right: 1px solid var(--line); }
+      .panel-section:nth-child(even) { border-right: 0; }
+      .study { min-height: 570px; }
+    }
+    @media (max-width: 520px) {
+      .header-inner { padding: 10px 13px; }
+      .mark { width: 34px; height: 34px; }
+      .brand h1 { font-size: .96rem; }
+      .header-stats .stat { min-width: 60px; padding: 7px; }
+      aside { grid-template-columns: 1fr; }
+      .panel-section { border-right: 0; }
+      .study-top { align-items: flex-start; }
+      .card-area { padding: 24px 16px; }
+      .answer-row { grid-template-columns: 1fr; }
+      .submit { width: 100%; }
+      .study-bottom > span { display: none; }
+      .study-bottom { justify-content: flex-end; }
+      .analytics-summary { grid-template-columns: 1fr; }
+      .analytics-metric { border-left: 0; border-top: 1px solid var(--line); }
+      .analytics-metric:first-child { border-top: 0; }
+      .dialog-foot { align-items: stretch; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="header-inner">
+        <div class="brand">
+          <div class="mark" aria-hidden="true">e⁻</div>
+          <div><h1 id="appTitle">AP Chemistry Nomenclature</h1><p id="appSubtitle">Ions, ionic compounds, molecular compounds, and acids</p></div>
+        </div>
+        <div class="header-stats" aria-label="Session statistics">
+          <div class="stat"><strong id="scoreValue">0%</strong><span>accuracy</span></div>
+          <div class="stat"><strong id="streakValue">0</strong><span>streak</span></div>
+          <div class="stat"><strong id="remainingValue">200</strong><span>remaining</span></div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <aside aria-label="Quiz settings">
+        <section class="panel-section">
+          <h2 class="section-title">Quiz deck</h2>
+          <div class="segmented deck-switch" role="group" aria-label="Quiz deck">
+            <button id="namingDeck" class="active" type="button">Naming</button>
+            <button id="trendsDeck" type="button">Trends</button>
+            <button id="solubilityDeck" type="button">Solubility</button>
+          </div>
+        </section>
+        <section class="panel-section">
+          <h2 class="section-title">Study mode</h2>
+          <div class="segmented" role="group" aria-label="Study mode">
+            <button id="typeMode" class="active" type="button">Type answer</button>
+            <button id="flashMode" type="button">Flashcards</button>
+          </div>
+        </section>
+        <section class="panel-section" id="categorySection">
+          <h2 class="section-title">Question types</h2>
+          <div id="namingCategories" class="check-list">
+            <label class="check"><input type="checkbox" value="ions" checked><span>Ions</span><span class="count" id="count-ions"></span></label>
+            <label class="check"><input type="checkbox" value="ionic" checked><span>Ionic</span><span class="count" id="count-ionic"></span></label>
+            <label class="check"><input type="checkbox" value="molecular" checked><span>Molecular</span><span class="count" id="count-molecular"></span></label>
+            <label class="check"><input type="checkbox" value="acids" checked><span>Acids</span><span class="count" id="count-acids"></span></label>
+          </div>
+          <div id="trendCategories" class="check-list hidden">
+            <label class="check"><input type="checkbox" value="atomicRadius" checked><span>Atomic radius</span><span class="count" id="count-atomicRadius"></span></label>
+            <label class="check"><input type="checkbox" value="ionicRadius" checked><span>Ionic radius</span><span class="count" id="count-ionicRadius"></span></label>
+            <label class="check"><input type="checkbox" value="electronegativity" checked><span>Electronegativity</span><span class="count" id="count-electronegativity"></span></label>
+            <label class="check"><input type="checkbox" value="electronAffinity" checked><span>Electron affinity</span><span class="count" id="count-electronAffinity"></span></label>
+            <label class="check"><input type="checkbox" value="ionizationEnergy" checked><span>1st ionization energy</span><span class="count" id="count-ionizationEnergy"></span></label>
+            <label class="check"><input type="checkbox" value="successiveIE" checked><span>Successive IE</span><span class="count" id="count-successiveIE"></span></label>
+          </div>
+          <div id="solubilityCategories" class="hidden">
+            <div class="check-list">
+              <label class="check"><input type="checkbox" value="solAlways" checked><span>Soluble salts</span><span class="count" id="count-solAlways"></span></label>
+              <label class="check"><input type="checkbox" value="solHalides" checked><span>Cl⁻, Br⁻, I⁻</span><span class="count" id="count-solHalides"></span></label>
+              <label class="check"><input type="checkbox" value="solSulfates" checked><span>Sulfates</span><span class="count" id="count-solSulfates"></span></label>
+              <label class="check"><input type="checkbox" value="solCarbonates" checked><span>Carbonates & phosphates</span><span class="count" id="count-solCarbonates"></span></label>
+              <label class="check"><input type="checkbox" value="solHydroxides" checked><span>Hydroxides</span><span class="count" id="count-solHydroxides"></span></label>
+              <label class="check"><input type="checkbox" value="solSulfides" checked><span>Sulfides</span><span class="count" id="count-solSulfides"></span></label>
+            </div>
+            <p class="solubility-note">Classify ionic compounds in water near room temperature. “Insoluble” means poorly soluble, not zero solubility. Borderline, slightly soluble examples are omitted.</p>
+            <details class="solubility-guide">
+              <summary>Solubility guidelines</summary>
+              <ul>
+                <li>Na⁺, K⁺, NH₄⁺ and nitrate salts are soluble. Most acetates are soluble.</li>
+                <li>Chlorides, bromides and iodides are usually soluble; Ag⁺, Pb²⁺, Hg₂²⁺ and Cu⁺ are important exceptions. This rule does not cover fluoride.</li>
+                <li>Most sulfates are soluble; BaSO₄, SrSO₄ and PbSO₄ are insoluble.</li>
+                <li>Most carbonates and phosphates are insoluble; Na⁺, K⁺ and NH₄⁺ salts are exceptions.</li>
+                <li>Most hydroxides are insoluble; NaOH, KOH, Sr(OH)₂ and Ba(OH)₂ are soluble. Ca(OH)₂ is slightly soluble and is not quizzed here.</li>
+                <li>Most sulfides are insoluble; Na⁺, K⁺, NH₄⁺ and alkaline-earth salts are common exceptions.</li>
+              </ul>
+              <a href="https://chemed.chem.purdue.edu/genchem/topicreview/bp/ch18/soluble.php" target="_blank" rel="noopener noreferrer">Purdue: solubility guidelines</a>
+            </details>
+          </div>
+        </section>
+        <section class="panel-section" id="directionSection">
+          <h2 class="section-title">Direction</h2>
+          <select id="direction" class="select" aria-label="Question direction">
+            <option value="both">Mixed directions</option>
+            <option value="toName">Formula → name</option>
+            <option value="toFormula">Name → formula</option>
+          </select>
+        </section>
+        <section class="panel-section">
+          <button id="newQueue" class="button primary full" type="button">New randomized queue</button>
+          <button id="reviewProgress" class="button full" type="button" style="margin-top:8px">Review missed questions</button>
+          <button id="resetStats" class="button danger full" type="button" style="margin-top:8px">Reset saved stats</button>
+        </section>
+      </aside>
+
+      <section class="study" aria-live="polite">
+        <div class="progress-wrap" aria-hidden="true"><div id="progressBar" class="progress-bar"></div></div>
+        <div class="study-top">
+          <div class="badges"><span id="categoryBadge" class="badge">Ion</span><span id="directionBadge" class="badge direction">Formula → name</span></div>
+          <div id="questionCount" class="question-count">Question 1 of 200</div>
+        </div>
+        <div class="card-area">
+          <div id="quizView" class="prompt">
+            <p id="promptLabel" class="prompt-label">Name this ion</p>
+            <p id="promptValue" class="prompt-value">SO₄²⁻</p>
+            <div id="typeArea" class="answer-zone">
+              <form id="answerForm" class="answer-row">
+                <input id="answerInput" class="answer-input" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Your answer" placeholder="Type your answer">
+                <button class="submit" type="submit">Check</button>
+              </form>
+              <p id="solubilityHelp" class="answer-help hidden">y = soluble · n = insoluble · Enter to check, then Enter for next</p>
+              <div id="formulaTools" class="formula-tools" aria-label="Formula symbols">
+                <div class="script-group">
+                  <span class="script-label">Subscript</span>
+                  <button class="script-button" type="button" data-insert="₂" aria-label="Insert subscript 2">₂</button>
+                  <button class="script-button" type="button" data-insert="₃" aria-label="Insert subscript 3">₃</button>
+                  <button class="script-button" type="button" data-insert="₄" aria-label="Insert subscript 4">₄</button>
+                  <button class="script-button" type="button" data-insert="₅" aria-label="Insert subscript 5">₅</button>
+                  <button class="script-button" type="button" data-insert="₆" aria-label="Insert subscript 6">₆</button>
+                  <button class="script-button" type="button" data-insert="₇" aria-label="Insert subscript 7">₇</button>
+                </div>
+                <div class="script-group">
+                  <span class="script-label">Charge</span>
+                  <button class="script-button" type="button" data-insert="²" aria-label="Insert superscript 2">²</button>
+                  <button class="script-button" type="button" data-insert="³" aria-label="Insert superscript 3">³</button>
+                  <button class="script-button" type="button" data-insert="⁴" aria-label="Insert superscript 4">⁴</button>
+                  <button class="script-button" type="button" data-insert="⁺" aria-label="Insert superscript plus">⁺</button>
+                  <button class="script-button" type="button" data-insert="⁻" aria-label="Insert superscript minus">⁻</button>
+                </div>
+              </div>
+              <div id="feedback" class="feedback"></div>
+            </div>
+            <div id="flashArea" class="answer-zone hidden">
+              <button id="revealButton" class="reveal" type="button">Reveal answer</button>
+              <div id="flashAnswer" class="flash-answer"><div><div class="prompt-label">Answer</div><div id="flashAnswerValue" class="answer"></div><div id="flashExplanation" class="flash-explanation"></div></div></div>
+              <div id="flashControls" class="flash-controls">
+                <button id="againButton" class="button again" type="button">Study again</button>
+                <button id="knowButton" class="button know" type="button">Got it</button>
+              </div>
+            </div>
+          </div>
+          <div id="completeView" class="complete hidden">
+            <h2>Queue complete</h2>
+            <div id="completeScore" class="complete-score">0%</div>
+            <p id="completeText"></p>
+            <button id="restartButton" class="button primary" type="button">Build another queue</button>
+          </div>
+        </div>
+        <div class="study-bottom">
+          <span id="lifetimeStats">Saved progress: 0 answered</span>
+          <div class="mini-actions">
+            <button id="skipButton" class="icon-button" type="button" title="Skip question" aria-label="Skip question">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4l10 8-10 8V4z"></path><path d="M19 5v14"></path></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="analyticsDialog" class="analytics-dialog" aria-labelledby="analyticsTitle">
+    <div class="dialog-head">
+      <div><h2 id="analyticsTitle">Most missed questions</h2><p>Ranked from your saved practice history on this device.</p></div>
+      <button id="closeAnalytics" class="dialog-close" type="button" aria-label="Close progress report">×</button>
+    </div>
+    <div class="analytics-body">
+      <div class="analytics-summary">
+        <div class="analytics-metric"><strong id="trackedItems">0</strong><span>questions tracked</span></div>
+        <div class="analytics-metric"><strong id="totalMisses">0</strong><span>total misses</span></div>
+        <div class="analytics-metric"><strong id="needsWork">0</strong><span>questions to review</span></div>
+      </div>
+      <div id="categorySummary" class="category-summary"></div>
+      <h3 class="missed-heading">Priority review</h3>
+      <div id="missedList" class="missed-list"></div>
+    </div>
+    <div class="dialog-foot">
+      <span id="copyStatus" class="copy-status"></span>
+      <button id="copyReport" class="button primary" type="button">Copy report for Codex</button>
+    </div>
+  </dialog>
+
+  <script>
+    const bank = {
+      ions: [
+        ['H⁺','hydrogen ion'],['Li⁺','lithium ion'],['Na⁺','sodium ion'],['K⁺','potassium ion'],['Rb⁺','rubidium ion'],['Cs⁺','cesium ion'],['Ag⁺','silver ion'],['NH₄⁺','ammonium ion'],
+        ['Mg²⁺','magnesium ion'],['Ca²⁺','calcium ion'],['Sr²⁺','strontium ion'],['Ba²⁺','barium ion'],['Zn²⁺','zinc ion'],['Cd²⁺','cadmium ion'],['Al³⁺','aluminum ion'],
+        ['Fe²⁺','iron(II) ion'],['Fe³⁺','iron(III) ion'],['Cu⁺','copper(I) ion'],['Cu²⁺','copper(II) ion'],['Co²⁺','cobalt(II) ion'],['Co³⁺','cobalt(III) ion'],
+        ['Ni²⁺','nickel(II) ion'],['Ni³⁺','nickel(III) ion'],['Cr²⁺','chromium(II) ion'],['Cr³⁺','chromium(III) ion'],['Mn²⁺','manganese(II) ion'],
+        ['Pb²⁺','lead(II) ion'],['Pb⁴⁺','lead(IV) ion'],['Sn²⁺','tin(II) ion'],['Sn⁴⁺','tin(IV) ion'],['Hg₂²⁺','mercury(I) ion'],['Hg²⁺','mercury(II) ion'],
+        ['H⁻','hydride ion'],['F⁻','fluoride ion'],['Cl⁻','chloride ion'],['Br⁻','bromide ion'],['I⁻','iodide ion'],['O²⁻','oxide ion'],['S²⁻','sulfide ion'],['N³⁻','nitride ion'],['P³⁻','phosphide ion'],
+        ['OH⁻','hydroxide ion'],['CN⁻','cyanide ion'],['C₂H₃O₂⁻','acetate ion|ethanoate ion'],['NO₃⁻','nitrate ion'],['NO₂⁻','nitrite ion'],['MnO₄⁻','permanganate ion'],
+        ['ClO⁻','hypochlorite ion'],['ClO₂⁻','chlorite ion'],['ClO₃⁻','chlorate ion'],['ClO₄⁻','perchlorate ion'],['HCO₃⁻','hydrogen carbonate ion|bicarbonate ion'],
+        ['HSO₄⁻','hydrogen sulfate ion|bisulfate ion'],['HSO₃⁻','hydrogen sulfite ion|bisulfite ion'],['H₂PO₄⁻','dihydrogen phosphate ion'],['SCN⁻','thiocyanate ion'],['N₃⁻','azide ion'],
+        ['CO₃²⁻','carbonate ion'],['SO₄²⁻','sulfate ion'],['SO₃²⁻','sulfite ion'],['CrO₄²⁻','chromate ion'],['Cr₂O₇²⁻','dichromate ion'],['O₂²⁻','peroxide ion'],
+        ['C₂O₄²⁻','oxalate ion'],['S₂O₃²⁻','thiosulfate ion'],['HPO₄²⁻','hydrogen phosphate ion|monohydrogen phosphate ion'],['SiO₃²⁻','silicate ion'],['BO₃³⁻','borate ion'],['PO₄³⁻','phosphate ion'],['AsO₄³⁻','arsenate ion'],
+        ['HS⁻','hydrosulfide ion|hydrogen sulfide ion|bisulfide ion'],['O₂⁻','superoxide ion'],['OCN⁻','cyanate ion'],
+        ['BrO⁻','hypobromite ion'],['BrO₂⁻','bromite ion'],['BrO₃⁻','bromate ion'],['BrO₄⁻','perbromate ion'],
+        ['IO⁻','hypoiodite ion'],['IO₂⁻','iodite ion'],['IO₃⁻','iodate ion'],['IO₄⁻','periodate ion|metaperiodate ion'],
+        ['AsO₃³⁻','arsenite ion'],['SeO₃²⁻','selenite ion'],['SeO₄²⁻','selenate ion']
+      ],
+      acids: [
+        ['HF','hydrofluoric acid'],['HCl','hydrochloric acid'],['HBr','hydrobromic acid'],['HI','hydroiodic acid'],['H₂S','hydrosulfuric acid'],['HCN','hydrocyanic acid'],
+        ['HNO₃','nitric acid'],['HNO₂','nitrous acid'],['H₂SO₄','sulfuric acid'],['H₂SO₃','sulfurous acid'],['H₂CO₃','carbonic acid'],['H₃PO₄','phosphoric acid'],['H₃PO₃','phosphorous acid'],
+        ['HClO','hypochlorous acid'],['HClO₂','chlorous acid'],['HClO₃','chloric acid'],['HClO₄','perchloric acid'],['HBrO','hypobromous acid'],['HBrO₃','bromic acid'],
+        ['HIO₃','iodic acid'],['HIO₄','periodic acid'],['HMnO₄','permanganic acid'],['H₂CrO₄','chromic acid'],['H₂Cr₂O₇','dichromic acid'],
+        ['HC₂H₃O₂','acetic acid|ethanoic acid'],['H₂C₂O₄','oxalic acid'],['H₃BO₃','boric acid']
+      ],
+      molecular: [
+        ['CO','carbon monoxide'],['CO₂','carbon dioxide'],['NO','nitrogen monoxide|nitric oxide'],['NO₂','nitrogen dioxide'],['N₂O','dinitrogen monoxide|nitrous oxide'],['N₂O₃','dinitrogen trioxide'],['N₂O₄','dinitrogen tetroxide'],['N₂O₅','dinitrogen pentoxide'],
+        ['SO₂','sulfur dioxide'],['SO₃','sulfur trioxide'],['SF₂','sulfur difluoride'],['SF₄','sulfur tetrafluoride'],['SF₆','sulfur hexafluoride'],['S₂Cl₂','disulfur dichloride'],
+        ['PCl₃','phosphorus trichloride'],['PCl₅','phosphorus pentachloride'],['PF₃','phosphorus trifluoride'],['PF₅','phosphorus pentafluoride'],['P₂O₃','diphosphorus trioxide'],['P₂O₅','diphosphorus pentoxide'],['P₄O₁₀','tetraphosphorus decoxide'],
+        ['Cl₂O','dichlorine monoxide'],['Cl₂O₃','dichlorine trioxide'],['Cl₂O₅','dichlorine pentoxide'],['Cl₂O₇','dichlorine heptoxide'],['IF₅','iodine pentafluoride'],['IF₇','iodine heptafluoride'],
+        ['BrF₃','bromine trifluoride'],['BrF₅','bromine pentafluoride'],['NF₃','nitrogen trifluoride'],['NCl₃','nitrogen trichloride'],['NI₃','nitrogen triiodide'],
+        ['CCl₄','carbon tetrachloride'],['CF₄','carbon tetrafluoride'],['SiO₂','silicon dioxide'],['SiCl₄','silicon tetrachloride'],['BCl₃','boron trichloride'],['BF₃','boron trifluoride'],
+        ['CS₂','carbon disulfide'],['SeF₆','selenium hexafluoride'],['XeF₂','xenon difluoride'],['XeF₄','xenon tetrafluoride'],['XeF₆','xenon hexafluoride']
+      ],
+      ionic: [
+        ['NaCl','sodium chloride'],['Na₂O','sodium oxide'],['Na₂S','sodium sulfide'],['Na₃N','sodium nitride'],['NaOH','sodium hydroxide'],['NaNO₃','sodium nitrate'],['Na₂CO₃','sodium carbonate'],['NaHCO₃','sodium hydrogen carbonate|sodium bicarbonate'],['Na₃PO₄','sodium phosphate'],
+        ['KBr','potassium bromide'],['KI','potassium iodide'],['K₂O','potassium oxide'],['K₂SO₄','potassium sulfate'],['K₂SO₃','potassium sulfite'],['KClO₃','potassium chlorate'],['KMnO₄','potassium permanganate'],['K₂Cr₂O₇','potassium dichromate'],
+        ['MgCl₂','magnesium chloride'],['MgO','magnesium oxide'],['Mg₃N₂','magnesium nitride'],['Mg(OH)₂','magnesium hydroxide'],['MgSO₄','magnesium sulfate'],['Mg₃(PO₄)₂','magnesium phosphate'],
+        ['CaCl₂','calcium chloride'],['CaF₂','calcium fluoride'],['CaO','calcium oxide'],['CaS','calcium sulfide'],['CaCO₃','calcium carbonate'],['Ca(NO₃)₂','calcium nitrate'],['Ca₃(PO₄)₂','calcium phosphate'],['Ca(C₂H₃O₂)₂','calcium acetate'],
+        ['BaCl₂','barium chloride'],['BaSO₄','barium sulfate'],['Ba(OH)₂','barium hydroxide'],['Al₂O₃','aluminum oxide'],['AlCl₃','aluminum chloride'],['Al₂S₃','aluminum sulfide'],['Al(NO₃)₃','aluminum nitrate'],['Al₂(SO₄)₃','aluminum sulfate'],
+        ['NH₄Cl','ammonium chloride'],['(NH₄)₂SO₄','ammonium sulfate'],['(NH₄)₂CO₃','ammonium carbonate'],['(NH₄)₃PO₄','ammonium phosphate'],['NH₄NO₃','ammonium nitrate'],
+        ['AgCl','silver chloride'],['Ag₂O','silver oxide'],['AgNO₃','silver nitrate'],['ZnCl₂','zinc chloride'],['ZnS','zinc sulfide'],['ZnSO₄','zinc sulfate'],['Zn₃(PO₄)₂','zinc phosphate'],
+        ['FeO','iron(II) oxide'],['Fe₂O₃','iron(III) oxide'],['FeCl₂','iron(II) chloride'],['FeCl₃','iron(III) chloride'],['FeSO₄','iron(II) sulfate'],['Fe₂(SO₄)₃','iron(III) sulfate'],['Fe(NO₃)₃','iron(III) nitrate'],
+        ['Cu₂O','copper(I) oxide'],['CuO','copper(II) oxide'],['CuCl','copper(I) chloride'],['CuCl₂','copper(II) chloride'],['CuSO₄','copper(II) sulfate'],['Cu₃(PO₄)₂','copper(II) phosphate'],
+        ['CoCl₂','cobalt(II) chloride'],['CoCl₃','cobalt(III) chloride'],['Co(NO₃)₂','cobalt(II) nitrate'],['Co₂(SO₄)₃','cobalt(III) sulfate'],
+        ['CrCl₃','chromium(III) chloride'],['Cr₂O₃','chromium(III) oxide'],['Cr₂(SO₄)₃','chromium(III) sulfate'],['NiO','nickel(II) oxide'],['NiCl₂','nickel(II) chloride'],
+        ['PbO','lead(II) oxide'],['PbO₂','lead(IV) oxide'],['PbCl₂','lead(II) chloride'],['PbCl₄','lead(IV) chloride'],['PbS','lead(II) sulfide'],
+        ['SnCl₂','tin(II) chloride'],['SnCl₄','tin(IV) chloride'],['SnO','tin(II) oxide'],['SnO₂','tin(IV) oxide'],['Hg₂Cl₂','mercury(I) chloride'],['HgCl₂','mercury(II) chloride']
+      ]
+    };
+
+    const trendBank = {
+      atomicRadius: [
+        ['Which atom has the larger atomic radius: Na or Cl?','Na|sodium','Atomic radius decreases from left to right because effective nuclear charge increases.'],
+        ['Which atom has the larger atomic radius: Li or Cs?','Cs|cesium','Atomic radius increases down a group as occupied energy levels are added.'],
+        ['Which atom has the smaller atomic radius: Mg or S?','S|sulfur','Across period 3, increasing effective nuclear charge pulls electrons closer.'],
+        ['Which atom has the larger atomic radius: Al or B?','Al|aluminum','Al is below B and has an additional occupied energy level.'],
+        ['Which atom has the smaller atomic radius: K or Na?','Na|sodium','Na is above K, so it has fewer occupied energy levels.'],
+        ['Which atom is largest: K, Ca, or Br?','K|potassium','All are in period 4; radius generally decreases from left to right.'],
+        ['Which atom is smallest: C, N, or O?','O|oxygen','Within period 2, radius generally decreases from left to right.'],
+        ['Across a period, atomic radius generally increases or decreases?','decreases|decrease','Effective nuclear charge increases across a period while shielding changes little.'],
+        ['Down a group, atomic radius generally increases or decreases?','increases|increase','Each step down adds an occupied principal energy level.'],
+        ['Which has the larger radius: Si or P?','Si|silicon','Si is to the left of P in the same period.']
+      ],
+      ionicRadius: [
+        ['Which is larger: Na or Na⁺?','Na|sodium|the sodium atom','A cation is smaller than its neutral atom because electron loss reduces repulsion and may remove a shell.'],
+        ['Which is larger: Cl or Cl⁻?','Cl⁻|chloride|chloride ion','An anion is larger than its neutral atom because added electron repulsion expands the electron cloud.'],
+        ['Which ion is largest: O²⁻, F⁻, or Na⁺?','O²⁻|oxide|oxide ion','These ions are isoelectronic; the species with the fewest protons is largest.'],
+        ['Which ion is smallest: N³⁻, O²⁻, F⁻, or Mg²⁺?','Mg²⁺|magnesium ion','In an isoelectronic series, more protons pull the same number of electrons closer.'],
+        ['Which ion is larger: K⁺ or Na⁺?','K⁺|potassium ion','Ionic radius increases down a group.'],
+        ['Which ion is smaller: Ca²⁺ or K⁺?','Ca²⁺|calcium ion','They are isoelectronic, but Ca²⁺ has one more proton.'],
+        ['When an atom forms a cation, its radius generally increases or decreases?','decreases|decrease','Losing electrons reduces electron-electron repulsion and can remove the valence shell.'],
+        ['When an atom forms an anion, its radius generally increases or decreases?','increases|increase','Adding electrons increases repulsion within the valence shell.'],
+        ['Which is larger: Fe²⁺ or Fe³⁺?','Fe²⁺|iron(II) ion|iron 2+','The ion with the lower positive charge holds its electrons less tightly.'],
+        ['Which is larger: S²⁻ or Cl⁻?','S²⁻|sulfide|sulfide ion','They are isoelectronic, and S²⁻ has fewer protons.']
+      ],
+      electronegativity: [
+        ['Which is more electronegative: C or O?','O|oxygen','Electronegativity generally increases from left to right.'],
+        ['Which is more electronegative: F or Cl?','F|fluorine','Electronegativity generally decreases down a group.'],
+        ['Which element is the most electronegative?','F|fluorine','Fluorine has the strongest attraction for shared electrons.'],
+        ['Which is less electronegative: Na or Mg?','Na|sodium','Electronegativity generally increases across a period.'],
+        ['Which is more electronegative: S or Se?','S|sulfur','S is above Se in group 16.'],
+        ['Which is most electronegative: P, S, or Cl?','Cl|chlorine','Across period 3, electronegativity increases toward chlorine.'],
+        ['Across a period, electronegativity generally increases or decreases?','increases|increase','Increasing effective nuclear charge strengthens attraction for bonding electrons.'],
+        ['Down a group, electronegativity generally increases or decreases?','decreases|decrease','Greater distance and shielding weaken attraction for bonding electrons.'],
+        ['Which bond is more polar: H–F or H–Cl?','H-F|HF|H–F','H–F has the larger electronegativity difference.'],
+        ['Which is more electronegative: N or P?','N|nitrogen','N is above P in group 15.']
+      ],
+      electronAffinity: [
+        ['Which has the more exothermic electron affinity: Na or Cl?','Cl|chlorine','Halogens strongly favor gaining one electron to complete a valence shell.'],
+        ['Which has the more exothermic electron affinity: F or Ne?','F|fluorine','Noble gases resist adding an electron to a new, higher-energy subshell.'],
+        ['Which has the more exothermic electron affinity: Cl or Br?','Cl|chlorine','Electron affinity generally becomes less exothermic down the halogens.'],
+        ['Which group generally has the most exothermic electron affinities?','halogens|group 17|17','Halogens are one electron short of a filled valence shell.'],
+        ['Is adding an electron to a halogen generally exothermic or endothermic?','exothermic','The added electron completes the halogen valence shell.'],
+        ['Which has the more favorable electron affinity: S or Ar?','S|sulfur','Ar has a filled valence shell and resists an additional electron.'],
+        ['Which has the more exothermic electron affinity: Li or Be?','Li|lithium','Be has a filled 2s subshell, so its added electron must enter 2p.'],
+        ['Why are electron-affinity trends less regular than electronegativity trends?','subshell stability|electron repulsion|orbital configuration','Filled and half-filled subshells plus electron repulsion create important exceptions.'],
+        ['Which has the more exothermic electron affinity: C or N?','C|carbon','N has a stable half-filled 2p subshell, making electron addition less favorable.'],
+        ['For electron affinity, does a more negative value mean electron gain is more or less favorable?','more favorable|more|more exothermic','A more negative energy change releases more energy when the electron is added.']
+      ],
+      ionizationEnergy: [
+        ['Which has the higher first ionization energy: Na or Cl?','Cl|chlorine','First ionization energy generally increases across a period.'],
+        ['Which has the higher first ionization energy: Li or Cs?','Li|lithium','Ionization energy generally decreases down a group.'],
+        ['Which has the lower first ionization energy: K or Ca?','K|potassium','K is farther left in period 4 and loses its valence electron more easily.'],
+        ['Which has the higher first ionization energy: Mg or Al?','Mg|magnesium','Exception: Al loses a higher-energy 3p electron, while Mg has a filled 3s subshell.'],
+        ['Which has the higher first ionization energy: N or O?','N|nitrogen','Exception: N has a stable half-filled 2p subshell; O has paired-electron repulsion.'],
+        ['Which element generally has the highest first ionization energy?','He|helium','Helium is very small and has a filled 1s shell.'],
+        ['Across a period, first ionization energy generally increases or decreases?','increases|increase','Increasing effective nuclear charge holds valence electrons more tightly.'],
+        ['Down a group, first ionization energy generally increases or decreases?','decreases|decrease','Distance and shielding make the valence electron easier to remove.'],
+        ['Which has the lower first ionization energy: Rb or Na?','Rb|rubidium','Rb is farther down group 1, so its valence electron is more shielded.'],
+        ['Which has the higher first ionization energy: P or S?','P|phosphorus','Exception: P has a stable half-filled 3p subshell.']
+      ],
+      successiveIE: [
+        ['A large jump occurs between IE₁ and IE₂. How many valence electrons does the atom have?','1|one','After one valence electron is removed, the next electron is a core electron.'],
+        ['A large jump occurs between IE₂ and IE₃. How many valence electrons does the atom have?','2|two','Two valence electrons are removed before ionization reaches the core.'],
+        ['A large jump occurs between IE₃ and IE₄. Which main-group family is indicated?','group 13|13|boron group','Three valence electrons indicate group 13 for a main-group element.'],
+        ['A large jump occurs between IE₄ and IE₅. How many valence electrons does the atom have?','4|four','The first four electrons are valence electrons; the fifth is a core electron.'],
+        ['Successive ionization energies always increase or decrease?','increase|increases','After each removal, the remaining electrons experience greater attraction per electron.'],
+        ['Why does a very large jump appear in successive ionization energies?','core electron removal|removing a core electron|core electron','The jump marks the first attempt to remove an electron from a lower, filled shell.'],
+        ['IE values are 580, 1815, 2740, then 11,600 kJ/mol. How many valence electrons?','3|three','The large jump after IE₃ indicates three valence electrons.'],
+        ['IE values are 738, 1450, then 7730 kJ/mol. What group is the element likely in?','group 2|2|alkaline earth metals','The large jump after removing two electrons indicates two valence electrons.'],
+        ['An element has one very low IE followed by a huge IE₂. Is it likely an alkali metal or halogen?','alkali metal|group 1','An alkali metal reaches a noble-gas core after losing one electron.'],
+        ['A period-3 element has a large jump after IE₂. Identify the element.','Mg|magnesium','The period-3 group-2 element is magnesium.']
+      ]
+    };
+
+    // Curated rather than inferred from the naming bank: avoid borderline solubilities,
+    // hydrolyzing salts, and compounds whose reaction with water obscures classification.
+    const solubilityBank = {
+      solAlways: [
+        ['NaNO₃',true,'Na⁺ and NO₃⁻ both indicate a soluble salt.'],
+        ['KNO₃',true,'Potassium and nitrate salts are soluble.'],
+        ['AgNO₃',true,'Nitrate salts are soluble, even with Ag⁺. The silver-halide exception does not apply to nitrate.'],
+        ['Pb(NO₃)₂',true,'Nitrate salts are soluble, including lead(II) nitrate.'],
+        ['Cu(NO₃)₂',true,'NO₃⁻ makes this a soluble nitrate salt.'],
+        ['Fe(NO₃)₃',true,'Iron(III) nitrate is soluble: nitrate is the relevant anion.'],
+        ['NH₄Cl',true,'Ammonium salts are soluble.'],
+        ['NH₄NO₃',true,'Both NH₄⁺ and NO₃⁻ indicate solubility.'],
+        ['NaC₂H₃O₂',true,'Sodium acetate is soluble; sodium and most acetate salts dissolve readily.'],
+        ['KC₂H₃O₂',true,'Potassium acetate is soluble.'],
+        ['Ca(C₂H₃O₂)₂',true,'Most acetates, including calcium acetate, are soluble.'],
+        ['NH₄C₂H₃O₂',true,'Ammonium acetate is soluble.']
+      ],
+      solHalides: [
+        ['NaCl',true,'NaCl is soluble: sodium salts and most chlorides dissolve readily.'],
+        ['KBr',true,'Potassium bromide is soluble.'],
+        ['KI',true,'Potassium iodide is soluble.'],
+        ['MgCl₂',true,'Most chlorides are soluble, and Mg²⁺ is not a chloride exception.'],
+        ['CaBr₂',true,'Most bromides are soluble, including calcium bromide.'],
+        ['ZnCl₂',true,'Zinc chloride is soluble; Zn²⁺ is not a chloride exception.'],
+        ['CuCl₂',true,'Copper(II) chloride is soluble. Do not confuse Cu²⁺ with the Cu⁺ halide exception.'],
+        ['AgCl',false,'Ag⁺ is an exception to the usual chloride-solubility guideline.'],
+        ['AgBr',false,'Silver bromide is an insoluble silver halide.'],
+        ['AgI',false,'Silver iodide is an insoluble silver halide.'],
+        ['PbCl₂',false,'Pb²⁺ is a chloride exception; PbCl₂ is poorly soluble in room-temperature water.'],
+        ['PbI₂',false,'Lead(II) iodide is an insoluble halide exception.'],
+        ['Hg₂Cl₂',false,'Mercury(I), Hg₂²⁺, forms insoluble mercury(I) chloride.'],
+        ['CuBr',false,'Copper(I), Cu⁺, forms insoluble copper(I) bromide.']
+      ],
+      solSulfates: [
+        ['Na₂SO₄',true,'Sodium sulfate is soluble.'],
+        ['(NH₄)₂SO₄',true,'Ammonium sulfate is soluble.'],
+        ['MgSO₄',true,'Most sulfates are soluble; MgSO₄ is not an exception.'],
+        ['CuSO₄',true,'Copper(II) sulfate is soluble.'],
+        ['FeSO₄',true,'Iron(II) sulfate follows the usual soluble-sulfate guideline.'],
+        ['BaSO₄',false,'BaSO₄ is an insoluble exception to the sulfate guideline.'],
+        ['SrSO₄',false,'SrSO₄ is an insoluble sulfate exception.'],
+        ['PbSO₄',false,'PbSO₄ is an insoluble sulfate exception.']
+      ],
+      solCarbonates: [
+        ['Na₂CO₃',true,'Na⁺ makes sodium carbonate soluble despite the usual carbonate guideline.'],
+        ['K₃PO₄',true,'K⁺ makes potassium phosphate soluble despite the usual phosphate guideline.'],
+        ['(NH₄)₂CO₃',true,'Ammonium carbonate is soluble: NH₄⁺ is an exception to the carbonate guideline.'],
+        ['(NH₄)₃PO₄',true,'Ammonium phosphate is soluble.'],
+        ['CaCO₃',false,'Most carbonates are insoluble; Ca²⁺ is not a soluble-carbonate exception.'],
+        ['BaCO₃',false,'Barium carbonate is insoluble. The soluble barium hydroxide exception does not apply here.'],
+        ['MgCO₃',false,'Magnesium carbonate follows the usual insoluble-carbonate guideline.'],
+        ['Ag₂CO₃',false,'Silver carbonate is insoluble.'],
+        ['Ca₃(PO₄)₂',false,'Calcium phosphate follows the usual insoluble-phosphate guideline.'],
+        ['Zn₃(PO₄)₂',false,'Zinc phosphate is insoluble.']
+      ],
+      solHydroxides: [
+        ['NaOH',true,'Sodium hydroxide is a soluble exception to the usual hydroxide guideline.'],
+        ['KOH',true,'Potassium hydroxide is soluble.'],
+        ['Sr(OH)₂',true,'Strontium hydroxide is a soluble hydroxide exception.'],
+        ['Ba(OH)₂',true,'Barium hydroxide is a soluble hydroxide exception.'],
+        ['Mg(OH)₂',false,'Magnesium hydroxide is poorly soluble; Mg²⁺ is not a soluble-hydroxide exception.'],
+        ['Cu(OH)₂',false,'Copper(II) hydroxide is insoluble.'],
+        ['Fe(OH)₃',false,'Iron(III) hydroxide is insoluble.'],
+        ['Zn(OH)₂',false,'Zinc hydroxide is insoluble in water. Its behavior in added acid or excess base is a different question.']
+      ],
+      solSulfides: [
+        ['Na₂S',true,'Sodium sulfide is soluble: Na⁺ is an exception to the usual sulfide guideline.'],
+        ['K₂S',true,'Potassium sulfide is soluble.'],
+        ['(NH₄)₂S',true,'Ammonium sulfide is soluble.'],
+        ['ZnS',false,'Zinc sulfide follows the usual insoluble-sulfide guideline.'],
+        ['CuS',false,'Copper(II) sulfide is insoluble.'],
+        ['PbS',false,'Lead(II) sulfide is insoluble.'],
+        ['Ag₂S',false,'Silver sulfide is insoluble.'],
+        ['CdS',false,'Cadmium sulfide is insoluble.']
+      ]
+    };
+
+    const namingLabels = { ions: 'Ion', ionic: 'Ionic compound', molecular: 'Molecular compound', acids: 'Acid' };
+    const trendLabels = { atomicRadius: 'Atomic radius', ionicRadius: 'Ionic radius', electronegativity: 'Electronegativity', electronAffinity: 'Electron affinity', ionizationEnergy: '1st ionization energy', successiveIE: 'Successive IE' };
+    const solubilityLabels = { solAlways: 'Soluble salts', solHalides: 'Halides', solSulfates: 'Sulfates', solCarbonates: 'Carbonates & phosphates', solHydroxides: 'Hydroxides', solSulfides: 'Sulfides' };
+    const labels = {...namingLabels, ...trendLabels, ...solubilityLabels};
+    const QUESTION_STATS_KEY = 'apChemQuestionStats';
+    const state = { queue: [], index: 0, correct: 0, attempted: 0, streak: 0, locked: false, mode: 'type', deck: 'naming', requeue: [] };
+    const $ = id => document.getElementById(id);
+    const superscriptMap = {'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁺':'+','⁻':'-'};
+    const subscriptMap = {'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9'};
+    const romanMap = { i: '1', ii: '2', iii: '3', iv: '4' };
+
+    function normalize(value) {
+      return value.trim().toLowerCase()
+        .replace(/[₀₁₂₃₄₅₆₇₈₉]/g, c => subscriptMap[c])
+        .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻]/g, c => superscriptMap[c])
+        .replace(/\bion\b/g, '')
+        .replace(/\bmonooxide\b/g, 'monoxide')
+        .replace(/\btetraoxide\b/g, 'tetroxide')
+        .replace(/\bpentaoxide\b/g, 'pentoxide')
+        .replace(/\((iv|iii|ii|i)\)/g, (_, roman) => `(${romanMap[roman]})`)
+        .replace(/\s+/g, '')
+        .replace(/[–—−]/g, '-')
+        .replace(/\^/g, '')
+        .replace(/([+-])(\d+)$/, '$2$1')
+        .replace(/^([a-z]+)([1-4])([a-z].*)$/, '$1($2)$3');
+    }
+
+    function aliases(text) { return text.split('|').map(s => s.trim()); }
+    function shuffle(input) {
+      const arr = [...input];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+    function categoryContainer() {
+      return $({ naming: 'namingCategories', trends: 'trendCategories', solubility: 'solubilityCategories' }[state.deck]);
+    }
+    function selectedCategories() {
+      return [...categoryContainer().querySelectorAll('.check input:checked')].map(x => x.value);
+    }
+
+    function candidates() {
+      const categories = selectedCategories();
+      if (state.deck === 'solubility') {
+        return categories.flatMap(category => solubilityBank[category].map(([formula, soluble, explanation]) => ({
+          id: `solubility-${formula}`, category, direction: 'solubility', prompt: formula,
+          answers: soluble ? ['y','yes','soluble'] : ['n','no','insoluble'],
+          display: soluble ? 'Yes — soluble' : 'No — insoluble', explanation
+        })));
+      }
+      if (state.deck === 'trends') {
+        return categories.flatMap(category => trendBank[category].map(([prompt, rawAnswers, explanation], itemIndex) => ({
+          id: `trend-${category}-${itemIndex}`, category, direction: 'concept', prompt,
+          answers: aliases(rawAnswers), display: aliases(rawAnswers)[0], explanation
+        })));
+      }
+      const direction = $('direction').value;
+      const result = [];
+      categories.forEach(category => {
+        bank[category].forEach(([formula, rawName], itemIndex) => {
+          const names = aliases(rawName);
+          if (direction !== 'toFormula') result.push({ id: `${category}-${itemIndex}-n`, category, direction: 'toName', prompt: formula, answers: names, display: names[0] });
+          if (direction !== 'toName') result.push({ id: `${category}-${itemIndex}-f`, category, direction: 'toFormula', prompt: names[0], answers: [formula], display: formula });
+          if (category === 'ions' && direction !== 'toName') {
+            names.slice(1).forEach((name, aliasIndex) => {
+              result.push({ id: `${category}-${itemIndex}-alias${aliasIndex + 1}-f`, category, direction: 'toFormula', prompt: name, answers: [formula], display: formula });
+            });
+          }
+        });
+      });
+      return result;
+    }
+
+    function buildQueue() {
+      let pool = candidates();
+      if (!pool.length) {
+        categoryContainer().querySelector('.check input').checked = true;
+        pool = candidates();
+      }
+      const queue = [];
+      while (queue.length < 200) {
+        const round = shuffle(pool);
+        for (const item of round) {
+          if (queue.length >= 200) break;
+          if (queue.length && queue[queue.length - 1].id === item.id) continue;
+          queue.push({...item, sequence: queue.length});
+        }
+      }
+      Object.assign(state, { queue, index: 0, correct: 0, attempted: 0, streak: 0, locked: false, requeue: [] });
+      $('completeView').classList.add('hidden');
+      $('quizView').classList.remove('hidden');
+      render();
+    }
+
+    function current() { return state.queue[state.index]; }
+    function promptText(q) {
+      if (q.direction === 'solubility') return 'Is this compound soluble in water?';
+      if (q.direction === 'concept') return 'Periodic trend question';
+      if (q.direction === 'toName') return q.category === 'ions' ? 'Name this ion' : `Name this ${labels[q.category].toLowerCase()}`;
+      return q.category === 'ions' ? 'Write the ion formula, including charge' : `Write the formula for this ${labels[q.category].toLowerCase()}`;
+    }
+
+    function render() {
+      if (state.index >= state.queue.length) return finish();
+      const q = current();
+      state.locked = false;
+      $('categoryBadge').textContent = labels[q.category];
+      $('directionBadge').textContent = q.direction === 'solubility' ? 'Soluble? y / n' : (q.direction === 'concept' ? 'Concept → answer' : (q.direction === 'toName' ? 'Formula → name' : 'Name → formula'));
+      $('promptLabel').textContent = promptText(q);
+      $('promptValue').textContent = q.prompt;
+      $('promptValue').classList.toggle('name', q.direction === 'toFormula' || q.direction === 'concept');
+      $('formulaTools').classList.toggle('show', q.direction === 'toFormula' && state.mode === 'type');
+      $('questionCount').textContent = `Question ${state.index + 1} of ${state.queue.length}`;
+      $('progressBar').style.width = `${(state.index / state.queue.length) * 100}%`;
+      $('feedback').className = 'feedback';
+      $('feedback').innerHTML = '';
+      $('answerInput').value = '';
+      $('answerInput').disabled = false;
+      $('answerInput').placeholder = q.direction === 'solubility' ? 'y or n' : 'Type your answer';
+      $('answerInput').setAttribute('aria-label', q.direction === 'solubility' ? 'Soluble in water? Type y or n' : 'Your answer');
+      $('solubilityHelp').classList.toggle('hidden', q.direction !== 'solubility');
+      document.querySelector('.submit').textContent = 'Check';
+      $('flashAnswer').classList.remove('show');
+      $('flashControls').classList.remove('show');
+      $('revealButton').classList.remove('hidden');
+      $('flashAnswerValue').textContent = q.display;
+      $('flashAnswerValue').classList.toggle('name', q.direction !== 'toFormula');
+      $('flashExplanation').textContent = q.direction === 'solubility' ? q.explanation : '';
+      updateStats();
+      if (state.mode === 'type') setTimeout(() => $('answerInput').focus(), 20);
+    }
+
+    function isCorrect(q, answer) { return q.answers.some(valid => normalize(valid) === normalize(answer)); }
+    function questionStats() { return JSON.parse(localStorage.getItem(QUESTION_STATS_KEY) || '{}'); }
+    function questionStatKey(q) { return q.id.replace(/-retry-.+$/, ''); }
+
+    function record(correct, response = '') {
+      state.attempted++;
+      state.streak = correct ? state.streak + 1 : 0;
+      if (correct) state.correct++;
+      const life = JSON.parse(localStorage.getItem('apChemNamingStats') || '{"answered":0,"correct":0}');
+      life.answered++;
+      if (correct) life.correct++;
+      localStorage.setItem('apChemNamingStats', JSON.stringify(life));
+      const q = current();
+      const stats = questionStats();
+      const key = questionStatKey(q);
+      const item = stats[key] || { attempts: 0, correct: 0, wrong: 0 };
+      item.attempts++;
+      if (correct) item.correct++;
+      else {
+        item.wrong++;
+        item.lastWrong = response || 'Marked Study again';
+      }
+      Object.assign(item, { prompt: q.prompt, answer: q.display, category: q.category, direction: q.direction });
+      stats[key] = item;
+      localStorage.setItem(QUESTION_STATS_KEY, JSON.stringify(stats));
+      updateStats();
+    }
+
+    function checkAnswer(event) {
+      event.preventDefault();
+      if (state.locked) return advance();
+      const answer = $('answerInput').value;
+      if (!answer.trim()) return;
+      const q = current();
+      if (q.direction === 'solubility' && !['y','yes','soluble','n','no','insoluble'].includes(answer.trim().toLowerCase())) {
+        $('feedback').className = 'feedback show';
+        $('feedback').textContent = 'Type y for soluble or n for insoluble, then press Enter.';
+        return;
+      }
+      const correct = isCorrect(q, answer);
+      state.locked = true;
+      $('answerInput').disabled = true;
+      record(correct, answer);
+      const box = $('feedback');
+      box.className = `feedback show ${correct ? 'correct' : 'incorrect'}`;
+      const explanation = q.explanation ? `<br><span>${escapeHtml(q.explanation)}</span>` : '';
+      box.innerHTML = correct
+        ? `<strong>Correct.</strong>${escapeHtml(q.display)}${explanation}`
+        : `<strong>Not quite.</strong>The answer is ${escapeHtml(q.display)}.${explanation}`;
+      document.querySelector('.submit').textContent = 'Next';
+    }
+
+    function advance() {
+      document.querySelector('.submit').textContent = 'Check';
+      state.index++;
+      render();
+    }
+
+    function reveal() {
+      $('revealButton').classList.add('hidden');
+      $('flashAnswer').classList.add('show');
+      $('flashControls').classList.add('show');
+    }
+
+    function gradeFlash(correct) {
+      record(correct, correct ? '' : 'Marked Study again');
+      if (!correct) state.requeue.push({...current(), id: `${current().id}-retry-${state.index}`});
+      state.index++;
+      if (state.index === state.queue.length && state.requeue.length) {
+        state.queue.push(...shuffle(state.requeue).slice(0, Math.min(20, state.requeue.length)));
+        state.requeue = [];
+      }
+      render();
+    }
+
+    function skip() { state.index++; render(); }
+    function finish() {
+      $('quizView').classList.add('hidden');
+      $('completeView').classList.remove('hidden');
+      $('progressBar').style.width = '100%';
+      const pct = state.attempted ? Math.round(state.correct / state.attempted * 100) : 0;
+      $('completeScore').textContent = `${pct}%`;
+      $('completeText').textContent = `${state.correct} correct out of ${state.attempted} answered. Build a new queue to reshuffle every category and direction.`;
+      $('remainingValue').textContent = '0';
+    }
+
+    function updateStats() {
+      const pct = state.attempted ? Math.round(state.correct / state.attempted * 100) : 0;
+      $('scoreValue').textContent = `${pct}%`;
+      $('streakValue').textContent = state.streak;
+      $('remainingValue').textContent = Math.max(0, state.queue.length - state.index);
+      const life = JSON.parse(localStorage.getItem('apChemNamingStats') || '{"answered":0,"correct":0}');
+      const lifePct = life.answered ? Math.round(life.correct / life.answered * 100) : 0;
+      $('lifetimeStats').textContent = `Saved progress: ${life.answered} answered · ${lifePct}% correct`;
+    }
+
+    function setMode(mode) {
+      state.mode = mode;
+      $('typeMode').classList.toggle('active', mode === 'type');
+      $('flashMode').classList.toggle('active', mode === 'flash');
+      $('typeArea').classList.toggle('hidden', mode !== 'type');
+      $('flashArea').classList.toggle('hidden', mode !== 'flash');
+      render();
+    }
+
+    function setDeck(deck) {
+      state.deck = deck;
+      const trends = deck === 'trends';
+      const soluble = deck === 'solubility';
+      $('namingDeck').classList.toggle('active', deck === 'naming');
+      $('trendsDeck').classList.toggle('active', trends);
+      $('solubilityDeck').classList.toggle('active', soluble);
+      $('namingCategories').classList.toggle('hidden', deck !== 'naming');
+      $('trendCategories').classList.toggle('hidden', !trends);
+      $('solubilityCategories').classList.toggle('hidden', !soluble);
+      $('directionSection').classList.toggle('hidden', deck !== 'naming');
+      $('appTitle').textContent = soluble ? 'AP Chemistry Solubility' : (trends ? 'AP Chemistry Periodic Trends' : 'AP Chemistry Nomenclature');
+      $('appSubtitle').textContent = soluble ? 'Compound → soluble or insoluble in water · answer y / n' : trends
+        ? 'Atomic and ionic radius, electronegativity, electron affinity, and ionization energy'
+        : 'Ions, ionic compounds, molecular compounds, and acids';
+      buildQueue();
+    }
+
+    function resetStats() {
+      localStorage.removeItem('apChemNamingStats');
+      localStorage.removeItem(QUESTION_STATS_KEY);
+      updateStats();
+      renderAnalytics();
+    }
+
+    function rankedStats() {
+      return Object.values(questionStats())
+        .filter(item => item.wrong > 0)
+        .sort((a, b) => b.wrong - a.wrong || (a.correct / a.attempts) - (b.correct / b.attempts) || a.prompt.localeCompare(b.prompt));
+    }
+
+    function renderAnalytics() {
+      const all = Object.values(questionStats());
+      const ranked = rankedStats();
+      const misses = all.reduce((sum, item) => sum + item.wrong, 0);
+      $('trackedItems').textContent = all.length;
+      $('totalMisses').textContent = misses;
+      $('needsWork').textContent = ranked.length;
+      const categories = Object.keys(labels).map(category => {
+        const items = all.filter(item => item.category === category);
+        const wrong = items.reduce((sum, item) => sum + item.wrong, 0);
+        return `<span class="category-chip">${labels[category]}: ${wrong} ${wrong === 1 ? 'miss' : 'misses'}</span>`;
+      });
+      $('categorySummary').innerHTML = categories.join('');
+      $('missedList').classList.toggle('missed-list', ranked.length > 0);
+      $('missedList').innerHTML = ranked.length
+        ? ranked.slice(0, 20).map((item, index) => {
+            const direction = directionLabel(item);
+            const lastWrong = item.lastWrong ? ` · Last response: ${escapeHtml(item.lastWrong)}` : '';
+            return `<div class="missed-row"><span class="missed-rank">${index + 1}</span><div class="missed-question"><strong>${escapeHtml(item.prompt)} → ${escapeHtml(item.answer)}</strong><span>${labels[item.category]} · ${direction} · ${item.correct}/${item.attempts} correct${lastWrong}</span></div><span class="missed-count">${item.wrong} missed</span></div>`;
+          }).join('')
+        : '<div class="analytics-empty">No missed questions yet. Complete a few questions and your priority list will appear here.</div>';
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
+    }
+
+    function directionLabel(item) {
+      return item.direction === 'solubility' ? 'solubility in water' : (item.direction === 'concept' ? 'periodic trend reasoning' : (item.direction === 'toName' ? 'formula → name' : 'name → formula'));
+    }
+
+    function practiceReport() {
+      const life = JSON.parse(localStorage.getItem('apChemNamingStats') || '{"answered":0,"correct":0}');
+      const all = Object.values(questionStats());
+      const ranked = rankedStats();
+      const accuracy = life.answered ? Math.round(life.correct / life.answered * 100) : 0;
+      const lines = [
+        'AP Chemistry practice report',
+        `Overall: ${life.correct}/${life.answered} correct (${accuracy}%)`,
+        ''
+      ];
+      Object.keys(labels).forEach(category => {
+        const items = all.filter(item => item.category === category);
+        const wrong = items.reduce((sum, item) => sum + item.wrong, 0);
+        const attempts = items.reduce((sum, item) => sum + item.attempts, 0);
+        lines.push(`${labels[category]}: ${wrong} misses across ${attempts} attempts`);
+      });
+      lines.push('', 'Most missed questions:');
+      if (!ranked.length) lines.push('No missed questions recorded yet.');
+      ranked.slice(0, 20).forEach((item, index) => {
+        const direction = directionLabel(item);
+        lines.push(`${index + 1}. [${labels[item.category]}, ${direction}] ${item.prompt} | Correct answer: ${item.answer} | Missed: ${item.wrong}/${item.attempts} | Last response: ${item.lastWrong || 'not recorded'}`);
+      });
+      lines.push('', 'Please use this report to identify patterns and create targeted AP Chemistry practice.');
+      return lines.join('\n');
+    }
+
+    async function copyPracticeReport() {
+      const report = practiceReport();
+      try {
+        await navigator.clipboard.writeText(report);
+      } catch {
+        const area = document.createElement('textarea');
+        area.value = report;
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand('copy');
+        area.remove();
+      }
+      $('copyStatus').textContent = 'Copied. Paste it into this chat when you are ready.';
+    }
+
+    function insertFormulaSymbol(symbol) {
+      const input = $('answerInput');
+      const start = input.selectionStart ?? input.value.length;
+      const end = input.selectionEnd ?? input.value.length;
+      input.value = input.value.slice(0, start) + symbol + input.value.slice(end);
+      const next = start + symbol.length;
+      input.focus();
+      input.setSelectionRange(next, next);
+    }
+
+    Object.entries(bank).forEach(([key, items]) => $('count-' + key).textContent = items.length);
+    Object.entries(trendBank).forEach(([key, items]) => $('count-' + key).textContent = items.length);
+    Object.entries(solubilityBank).forEach(([key, items]) => $('count-' + key).textContent = items.length);
+    $('answerForm').addEventListener('submit', checkAnswer);
+    $('revealButton').addEventListener('click', reveal);
+    $('againButton').addEventListener('click', () => gradeFlash(false));
+    $('knowButton').addEventListener('click', () => gradeFlash(true));
+    $('skipButton').addEventListener('click', skip);
+    $('newQueue').addEventListener('click', buildQueue);
+    $('restartButton').addEventListener('click', buildQueue);
+    $('resetStats').addEventListener('click', resetStats);
+    $('reviewProgress').addEventListener('click', () => { renderAnalytics(); $('copyStatus').textContent = ''; $('analyticsDialog').showModal(); });
+    $('closeAnalytics').addEventListener('click', () => $('analyticsDialog').close());
+    $('copyReport').addEventListener('click', copyPracticeReport);
+    $('typeMode').addEventListener('click', () => setMode('type'));
+    $('flashMode').addEventListener('click', () => setMode('flash'));
+    $('namingDeck').addEventListener('click', () => setDeck('naming'));
+    $('trendsDeck').addEventListener('click', () => setDeck('trends'));
+    $('solubilityDeck').addEventListener('click', () => setDeck('solubility'));
+    $('direction').addEventListener('change', buildQueue);
+    document.querySelectorAll('.check input').forEach(input => input.addEventListener('change', buildQueue));
+    document.querySelectorAll('[data-insert]').forEach(button => button.addEventListener('click', () => insertFormulaSymbol(button.dataset.insert)));
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Enter' && state.mode === 'type' && state.locked) {
+        event.preventDefault();
+        advance();
+        return;
+      }
+      if (state.mode === 'flash' && event.code === 'Space' && document.activeElement.tagName !== 'BUTTON') {
+        event.preventDefault();
+        if (!$('revealButton').classList.contains('hidden')) reveal();
+      }
+    });
+
+    buildQueue();
+  </script>
+</body>
+</html>
