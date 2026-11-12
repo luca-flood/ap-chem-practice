@@ -233,18 +233,19 @@
               <label class="check"><input type="checkbox" value="solHydroxides" checked><span>Hydroxides</span><span class="count" id="count-solHydroxides"></span></label>
               <label class="check"><input type="checkbox" value="solSulfides" checked><span>Sulfides</span><span class="count" id="count-solSulfides"></span></label>
             </div>
-            <p class="solubility-note">Classify ionic compounds in water near room temperature. “Insoluble” means poorly soluble, not zero solubility. Borderline, slightly soluble examples are omitted.</p>
+            <p class="solubility-note">Use Mr. Thaler’s chart for water at 25°C: y = soluble; n = insoluble or slightly soluble. Feedback distinguishes the two. Answers follow this classroom chart.</p>
+            <p id="solubilityMix" class="solubility-note">Exception focus: 60% exceptions · 40% standard rules.</p>
             <details class="solubility-guide">
               <summary>Solubility guidelines</summary>
               <ul>
-                <li>Na⁺, K⁺, NH₄⁺ and nitrate salts are soluble. Most acetates are soluble.</li>
-                <li>Chlorides, bromides and iodides are usually soluble; Ag⁺, Pb²⁺, Hg₂²⁺ and Cu⁺ are important exceptions. This rule does not cover fluoride.</li>
-                <li>Most sulfates are soluble; BaSO₄, SrSO₄ and PbSO₄ are insoluble.</li>
-                <li>Most carbonates and phosphates are insoluble; Na⁺, K⁺ and NH₄⁺ salts are exceptions.</li>
-                <li>Most hydroxides are insoluble; NaOH, KOH, Sr(OH)₂ and Ba(OH)₂ are soluble. Ca(OH)₂ is slightly soluble and is not quizzed here.</li>
-                <li>Most sulfides are insoluble; Na⁺, K⁺, NH₄⁺ and alkaline-earth salts are common exceptions.</li>
+                <li>Rules 1–2: Group IA and NH₄⁺ salts dissolve.</li>
+                <li>Rule 3: NO₃⁻, ClO₃⁻, ClO₄⁻ and C₂H₃O₂⁻ salts dissolve.</li>
+                <li>Rule 4: Cl⁻, Br⁻ and I⁻ salts usually dissolve; exceptions use Ag⁺, Hg₂²⁺, Hg²⁺ or Pb²⁺. Fluoride is not covered.</li>
+                <li>Rule 5: Sulfates usually dissolve. Ba²⁺, Hg₂²⁺, Hg²⁺, Pb²⁺ and Sr²⁺ are insoluble exceptions; CaSO₄ and Ag₂SO₄ are slightly soluble.</li>
+                <li>Rule 6: Hydroxides usually do not dissolve. Group IA and Ba(OH)₂ are soluble exceptions; Ca(OH)₂ is slightly soluble.</li>
+                <li>Rule 7: CO₃²⁻, PO₄³⁻ and S²⁻ salts usually do not dissolve; Group IA and NH₄⁺ are exceptions.</li>
               </ul>
-              <a href="https://chemed.chem.purdue.edu/genchem/topicreview/bp/ch18/soluble.php" target="_blank" rel="noopener noreferrer">Purdue: solubility guidelines</a>
+              <a href="https://www.mrthaler.net/uploads/6/5/4/3/65431157/solubility_guidelines_rev_2016.pdf" target="_blank" rel="noopener noreferrer">Mr. Thaler’s solubility guidelines (PDF)</a>
             </details>
           </div>
         </section>
@@ -278,7 +279,7 @@
                 <input id="answerInput" class="answer-input" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Your answer" placeholder="Type your answer">
                 <button class="submit" type="submit">Check</button>
               </form>
-              <p id="solubilityHelp" class="answer-help hidden">y = soluble · n = insoluble · Enter to check, then Enter for next</p>
+              <p id="solubilityHelp" class="answer-help hidden">y = soluble · n = insoluble / slightly soluble · Enter to check, then Enter for next</p>
               <div id="formulaTools" class="formula-tools" aria-label="Formula symbols">
                 <div class="script-group">
                   <span class="script-label">Subscript</span>
@@ -476,80 +477,48 @@
       ]
     };
 
-    // Curated rather than inferred from the naming bank: avoid borderline solubilities,
-    // hydrolyzing salts, and compounds whose reaction with water obscures classification.
+    // The supplied classroom chart is the answer key, including its mercury,
+    // strontium-hydroxide and sulfide conventions. Never silently substitute another chart.
+    // Exception is independent of yes/no: soluble overrides of insoluble families count too.
+    function solubilityRows(formulas, classification, exception, rule, reason) {
+      return formulas.map(formula => ({ formula, classification, exception, explanation: `Rule ${rule}: ${reason}` }));
+    }
     const solubilityBank = {
       solAlways: [
-        ['NaNO₃',true,'Na⁺ and NO₃⁻ both indicate a soluble salt.'],
-        ['KNO₃',true,'Potassium and nitrate salts are soluble.'],
-        ['AgNO₃',true,'Nitrate salts are soluble, even with Ag⁺. The silver-halide exception does not apply to nitrate.'],
-        ['Pb(NO₃)₂',true,'Nitrate salts are soluble, including lead(II) nitrate.'],
-        ['Cu(NO₃)₂',true,'NO₃⁻ makes this a soluble nitrate salt.'],
-        ['Fe(NO₃)₃',true,'Iron(III) nitrate is soluble: nitrate is the relevant anion.'],
-        ['NH₄Cl',true,'Ammonium salts are soluble.'],
-        ['NH₄NO₃',true,'Both NH₄⁺ and NO₃⁻ indicate solubility.'],
-        ['NaC₂H₃O₂',true,'Sodium acetate is soluble; sodium and most acetate salts dissolve readily.'],
-        ['KC₂H₃O₂',true,'Potassium acetate is soluble.'],
-        ['Ca(C₂H₃O₂)₂',true,'Most acetates, including calcium acetate, are soluble.'],
-        ['NH₄C₂H₃O₂',true,'Ammonium acetate is soluble.']
+        ...solubilityRows(['LiNO₃','NaNO₃','KNO₃','AgNO₃','Pb(NO₃)₂','Cu(NO₃)₂','Fe(NO₃)₃','Hg(NO₃)₂'], 'soluble', false, 3, 'Nitrate salts are soluble. Halide and sulfate exceptions do not apply to nitrate.'),
+        ...solubilityRows(['NH₄Cl','NH₄NO₃'], 'soluble', false, 2, 'Ammonium salts are soluble.'),
+        ...solubilityRows(['NaClO₃','Ba(ClO₃)₂','KClO₄','Pb(ClO₄)₂'], 'soluble', false, 3, 'Chlorate and perchlorate salts are soluble.'),
+        ...solubilityRows(['NaC₂H₃O₂','Ca(C₂H₃O₂)₂','Pb(C₂H₃O₂)₂','NH₄C₂H₃O₂'], 'soluble', false, 3, 'The chart classifies acetate salts as soluble.')
       ],
       solHalides: [
-        ['NaCl',true,'NaCl is soluble: sodium salts and most chlorides dissolve readily.'],
-        ['KBr',true,'Potassium bromide is soluble.'],
-        ['KI',true,'Potassium iodide is soluble.'],
-        ['MgCl₂',true,'Most chlorides are soluble, and Mg²⁺ is not a chloride exception.'],
-        ['CaBr₂',true,'Most bromides are soluble, including calcium bromide.'],
-        ['ZnCl₂',true,'Zinc chloride is soluble; Zn²⁺ is not a chloride exception.'],
-        ['CuCl₂',true,'Copper(II) chloride is soluble. Do not confuse Cu²⁺ with the Cu⁺ halide exception.'],
-        ['AgCl',false,'Ag⁺ is an exception to the usual chloride-solubility guideline.'],
-        ['AgBr',false,'Silver bromide is an insoluble silver halide.'],
-        ['AgI',false,'Silver iodide is an insoluble silver halide.'],
-        ['PbCl₂',false,'Pb²⁺ is a chloride exception; PbCl₂ is poorly soluble in room-temperature water.'],
-        ['PbI₂',false,'Lead(II) iodide is an insoluble halide exception.'],
-        ['Hg₂Cl₂',false,'Mercury(I), Hg₂²⁺, forms insoluble mercury(I) chloride.'],
-        ['CuBr',false,'Copper(I), Cu⁺, forms insoluble copper(I) bromide.']
+        ...solubilityRows(['NaCl','KBr','KI','MgCl₂','CaBr₂','ZnCl₂','CuCl₂'], 'soluble', false, 4, 'This chloride, bromide or iodide has none of the chart’s four exception cations.'),
+        ...solubilityRows(['AgCl','AgBr','AgI'], 'insoluble', true, 4, 'Ag⁺ overrides the usual soluble-halide pattern.'),
+        ...solubilityRows(['PbCl₂','PbBr₂','PbI₂'], 'insoluble', true, 4, 'Pb²⁺ is a listed exception to soluble chlorides, bromides and iodides.'),
+        ...solubilityRows(['Hg₂Cl₂','Hg₂Br₂','Hg₂I₂'], 'insoluble', true, 4, 'Mercury(I) is the paired ion Hg₂²⁺; it is a halide exception.'),
+        ...solubilityRows(['HgCl₂','HgBr₂','HgI₂'], 'insoluble', true, 4, 'Mr. Thaler’s chart also lists mercury(II), Hg²⁺, as a halide exception. Use this chart’s classification.')
       ],
       solSulfates: [
-        ['Na₂SO₄',true,'Sodium sulfate is soluble.'],
-        ['(NH₄)₂SO₄',true,'Ammonium sulfate is soluble.'],
-        ['MgSO₄',true,'Most sulfates are soluble; MgSO₄ is not an exception.'],
-        ['CuSO₄',true,'Copper(II) sulfate is soluble.'],
-        ['FeSO₄',true,'Iron(II) sulfate follows the usual soluble-sulfate guideline.'],
-        ['BaSO₄',false,'BaSO₄ is an insoluble exception to the sulfate guideline.'],
-        ['SrSO₄',false,'SrSO₄ is an insoluble sulfate exception.'],
-        ['PbSO₄',false,'PbSO₄ is an insoluble sulfate exception.']
+        ...solubilityRows(['Na₂SO₄','K₂SO₄','(NH₄)₂SO₄','MgSO₄','CuSO₄','FeSO₄'], 'soluble', false, 5, 'This sulfate follows the soluble default; its cation is not a listed sulfate exception.'),
+        ...solubilityRows(['BaSO₄','SrSO₄','PbSO₄','Hg₂SO₄','HgSO₄'], 'insoluble', true, 5, 'This cation is on the chart’s insoluble sulfate exception list.'),
+        ...solubilityRows(['CaSO₄','Ag₂SO₄'], 'slightly soluble', true, 5, 'The chart labels this sulfate slightly soluble, not fully soluble. In this y/n drill, answer n.')
       ],
       solCarbonates: [
-        ['Na₂CO₃',true,'Na⁺ makes sodium carbonate soluble despite the usual carbonate guideline.'],
-        ['K₃PO₄',true,'K⁺ makes potassium phosphate soluble despite the usual phosphate guideline.'],
-        ['(NH₄)₂CO₃',true,'Ammonium carbonate is soluble: NH₄⁺ is an exception to the carbonate guideline.'],
-        ['(NH₄)₃PO₄',true,'Ammonium phosphate is soluble.'],
-        ['CaCO₃',false,'Most carbonates are insoluble; Ca²⁺ is not a soluble-carbonate exception.'],
-        ['BaCO₃',false,'Barium carbonate is insoluble. The soluble barium hydroxide exception does not apply here.'],
-        ['MgCO₃',false,'Magnesium carbonate follows the usual insoluble-carbonate guideline.'],
-        ['Ag₂CO₃',false,'Silver carbonate is insoluble.'],
-        ['Ca₃(PO₄)₂',false,'Calcium phosphate follows the usual insoluble-phosphate guideline.'],
-        ['Zn₃(PO₄)₂',false,'Zinc phosphate is insoluble.']
+        ...solubilityRows(['CaCO₃','BaCO₃','MgCO₃','Ag₂CO₃','Ca₃(PO₄)₂','Zn₃(PO₄)₂','Ag₃PO₄','Ba₃(PO₄)₂'], 'insoluble', false, 7, 'Carbonates and phosphates are insoluble unless the cation is Group IA or NH₄⁺.'),
+        ...solubilityRows(['Na₂CO₃','K₂CO₃','Rb₂CO₃','Cs₂CO₃','Na₃PO₄','K₃PO₄','Rb₃PO₄','Cs₃PO₄'], 'soluble', true, '7 + 1', 'An alkali-metal cation overrides the insoluble carbonate/phosphate default.'),
+        ...solubilityRows(['(NH₄)₂CO₃','(NH₄)₃PO₄'], 'soluble', true, '7 + 2', 'NH₄⁺ is the soluble exception to the carbonate/phosphate default.')
       ],
       solHydroxides: [
-        ['NaOH',true,'Sodium hydroxide is a soluble exception to the usual hydroxide guideline.'],
-        ['KOH',true,'Potassium hydroxide is soluble.'],
-        ['Sr(OH)₂',true,'Strontium hydroxide is a soluble hydroxide exception.'],
-        ['Ba(OH)₂',true,'Barium hydroxide is a soluble hydroxide exception.'],
-        ['Mg(OH)₂',false,'Magnesium hydroxide is poorly soluble; Mg²⁺ is not a soluble-hydroxide exception.'],
-        ['Cu(OH)₂',false,'Copper(II) hydroxide is insoluble.'],
-        ['Fe(OH)₃',false,'Iron(III) hydroxide is insoluble.'],
-        ['Zn(OH)₂',false,'Zinc hydroxide is insoluble in water. Its behavior in added acid or excess base is a different question.']
+        ...solubilityRows(['Mg(OH)₂','Cu(OH)₂','Fe(OH)₂','Fe(OH)₃','Zn(OH)₂','Al(OH)₃','Ni(OH)₂'], 'insoluble', false, 6, 'This hydroxide is neither an alkali-metal hydroxide nor Ba(OH)₂, so the insoluble default applies.'),
+        ...solubilityRows(['Sr(OH)₂'], 'insoluble', false, 6, 'For this drill, follow the supplied chart: Sr(OH)₂ is not among its listed soluble hydroxide exceptions.'),
+        ...solubilityRows(['LiOH','NaOH','KOH','RbOH','CsOH'], 'soluble', true, '6 + 1', 'Alkali-metal hydroxides are exceptions to the insoluble-hydroxide default.'),
+        ...solubilityRows(['Ba(OH)₂'], 'soluble', true, 6, 'Ba(OH)₂ is the specifically named soluble hydroxide exception.'),
+        ...solubilityRows(['Ca(OH)₂'], 'slightly soluble', true, 6, 'Calcium hydroxide is slightly soluble on the chart. Use n in this binary drill; feedback preserves that distinction.')
       ],
       solSulfides: [
-        ['Na₂S',true,'Sodium sulfide is soluble: Na⁺ is an exception to the usual sulfide guideline.'],
-        ['K₂S',true,'Potassium sulfide is soluble.'],
-        ['(NH₄)₂S',true,'Ammonium sulfide is soluble.'],
-        ['ZnS',false,'Zinc sulfide follows the usual insoluble-sulfide guideline.'],
-        ['CuS',false,'Copper(II) sulfide is insoluble.'],
-        ['PbS',false,'Lead(II) sulfide is insoluble.'],
-        ['Ag₂S',false,'Silver sulfide is insoluble.'],
-        ['CdS',false,'Cadmium sulfide is insoluble.']
+        ...solubilityRows(['ZnS','CuS','PbS','Ag₂S','CdS','FeS','NiS'], 'insoluble', false, 7, 'This sulfide has neither a Group IA cation nor NH₄⁺; the insoluble default applies.'),
+        ...solubilityRows(['CaS','BaS','SrS'], 'insoluble', false, 7, 'The supplied chart gives sulfides only Group IA and NH₄⁺ exceptions. Do not borrow alkaline-earth exceptions from a different chart.'),
+        ...solubilityRows(['Li₂S','Na₂S','K₂S','Rb₂S','Cs₂S'], 'soluble', true, '7 + 1', 'A Group IA cation overrides the insoluble-sulfide default.'),
+        ...solubilityRows(['(NH₄)₂S'], 'soluble', true, '7 + 2', 'Ammonium sulfide is a soluble exception.')
       ]
     };
 
@@ -599,10 +568,11 @@
     function candidates() {
       const categories = selectedCategories();
       if (state.deck === 'solubility') {
-        return categories.flatMap(category => solubilityBank[category].map(([formula, soluble, explanation]) => ({
-          id: `solubility-${formula}`, category, direction: 'solubility', prompt: formula,
-          answers: soluble ? ['y','yes','soluble'] : ['n','no','insoluble'],
-          display: soluble ? 'Yes — soluble' : 'No — insoluble', explanation
+        return categories.flatMap(category => solubilityBank[category].map(({ formula, classification, exception, explanation }) => ({
+          id: `solubility-thaler2016-${formula}`, category, direction: 'solubility', prompt: formula, exception, classification,
+          answers: classification === 'soluble' ? ['y','yes','soluble'] : ['n','no','insoluble', ...(classification === 'slightly soluble' ? ['slightly soluble'] : [])],
+          display: classification === 'soluble' ? 'Yes — soluble' : `No — ${classification}`,
+          explanation: `${exception ? 'Exception. ' : ''}${explanation}`
         })));
       }
       if (state.deck === 'trends') {
@@ -628,13 +598,40 @@
       return result;
     }
 
+    function solubilityQueue(pool, length = 200) {
+      const exceptions = pool.filter(q => q.exception);
+      const standard = pool.filter(q => !q.exception);
+      const exceptionCount = exceptions.length ? (standard.length ? Math.round(length * 0.6) : length) : 0;
+      function sample(items, count) {
+        const sampled = [];
+        while (sampled.length < count) sampled.push(...shuffle(items).slice(0, count - sampled.length));
+        return sampled;
+      }
+      // Six exceptions and four standards per ten cards, not merely a 60%-sized bank.
+      const exceptionCards = sample(exceptions, exceptionCount);
+      const standardCards = sample(standard, length - exceptionCount);
+      const queue = [];
+      while (exceptionCards.length || standardCards.length) {
+        const block = shuffle([...exceptionCards.splice(0, 6), ...standardCards.splice(0, 4)]);
+        if (queue.length && block.length > 1 && queue[queue.length - 1].id === block[0].id) {
+          const next = block.findIndex(q => q.id !== block[0].id);
+          if (next > 0) [block[0], block[next]] = [block[next], block[0]];
+        }
+        queue.push(...block);
+      }
+      $('solubilityMix').textContent = exceptions.length && standard.length
+        ? `Exception focus: 60% exceptions (${exceptionCount}/${length}) · 40% standard rules.`
+        : exceptions.length ? 'Selected categories contain only exceptions.' : 'Selected categories contain only standard rules. Add another family to practice exceptions.';
+      return queue.map((q, sequence) => ({...q, sequence}));
+    }
+
     function buildQueue() {
       let pool = candidates();
       if (!pool.length) {
         categoryContainer().querySelector('.check input').checked = true;
         pool = candidates();
       }
-      const queue = [];
+      const queue = state.deck === 'solubility' ? solubilityQueue(pool) : [];
       while (queue.length < 200) {
         const round = shuffle(pool);
         for (const item of round) {
@@ -651,7 +648,7 @@
 
     function current() { return state.queue[state.index]; }
     function promptText(q) {
-      if (q.direction === 'solubility') return 'Is this compound soluble in water?';
+      if (q.direction === 'solubility') return 'Soluble in water at 25°C? (Thaler’s chart)';
       if (q.direction === 'concept') return 'Periodic trend question';
       if (q.direction === 'toName') return q.category === 'ions' ? 'Name this ion' : `Name this ${labels[q.category].toLowerCase()}`;
       return q.category === 'ions' ? 'Write the ion formula, including charge' : `Write the formula for this ${labels[q.category].toLowerCase()}`;
@@ -674,7 +671,7 @@
       $('answerInput').value = '';
       $('answerInput').disabled = false;
       $('answerInput').placeholder = q.direction === 'solubility' ? 'y or n' : 'Type your answer';
-      $('answerInput').setAttribute('aria-label', q.direction === 'solubility' ? 'Soluble in water? Type y or n' : 'Your answer');
+      $('answerInput').setAttribute('aria-label', q.direction === 'solubility' ? 'Soluble on Thaler’s chart? Type y or n' : 'Your answer');
       $('solubilityHelp').classList.toggle('hidden', q.direction !== 'solubility');
       document.querySelector('.submit').textContent = 'Check';
       $('flashAnswer').classList.remove('show');
@@ -721,7 +718,7 @@
       const answer = $('answerInput').value;
       if (!answer.trim()) return;
       const q = current();
-      if (q.direction === 'solubility' && !['y','yes','soluble','n','no','insoluble'].includes(answer.trim().toLowerCase())) {
+      if (q.direction === 'solubility' && !['y','yes','soluble','n','no','insoluble','slightly soluble'].includes(answer.trim().toLowerCase())) {
         $('feedback').className = 'feedback show';
         $('feedback').textContent = 'Type y for soluble or n for insoluble, then press Enter.';
         return;
@@ -804,7 +801,7 @@
       $('solubilityCategories').classList.toggle('hidden', !soluble);
       $('directionSection').classList.toggle('hidden', deck !== 'naming');
       $('appTitle').textContent = soluble ? 'AP Chemistry Solubility' : (trends ? 'AP Chemistry Periodic Trends' : 'AP Chemistry Nomenclature');
-      $('appSubtitle').textContent = soluble ? 'Compound → soluble or insoluble in water · answer y / n' : trends
+      $('appSubtitle').textContent = soluble ? 'Mr. Thaler’s guidelines · 60% exception practice · answer y / n' : trends
         ? 'Atomic and ionic radius, electronegativity, electron affinity, and ionization energy'
         : 'Ions, ionic compounds, molecular compounds, and acids';
       buildQueue();
